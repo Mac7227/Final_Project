@@ -1,4 +1,10 @@
+import sys
 import numpy as np
+import pygame
+import math
+
+Yellow = (255,255,0) # sets color yellow for use in visual board
+Black = (0,0,0) # sets color black for use in visual board
 
 # Creating dimensions for game board
 row_count = 6
@@ -52,38 +58,73 @@ def win(game_board, game_piece):
             if game_board[r][c] == game_piece and game_board[r-1][c+1] == game_piece and game_board[r-2][c+2] == game_piece and game_board[r-3][c+3] == game_piece: #if all the values are the same on the leftward diagonal
                 return True
 
+def draw_board(game_board): # function to draw game board with set sizes based on for loops with c and r
+    for c in range(col_count):
+        for r in range(row_count):
+            pygame.draw.rect(screen, Yellow, (c*square_size, r*square_size+square_size, square_size, square_size)) # draws the rectangular portion of the game board
+            pygame.draw.circle(screen, Black, (int(c*square_size+square_size/2), int(r*square_size+square_size+square_size/2)), radius) # draws the circular portion of the game board
+
+
 game_board = c4_board()
 
 # initializing game variables
 game_is_over = False
 player_turn = 1
+turn = 0
 
-while not game_is_over:
-    #  Player A user input
-    if player_turn % 2 == 1:  # If value of player turn is odd
-        col_selection = int(input("Player A Please Make Your Selection (Choose Column 0-6): "))  # Ask Player A to choose row, change into a string
+pygame.init()
 
-        if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full)
-            row = find_next_open_row(game_board, col_selection)  # Making row equal to the output of find_next_open_row
-            drop_game_piece(game_board, row, col_selection, 1)  # Drop game piece with value 1 at specified location
+square_size = 100 ## Sets size of squares for visual board
 
-            if win(game_board, 1): #if player A wins, print statement below
-                print("PlAYER A IS THE CONNECT 4 CHAMP")
-                game_is_over = True #end game
+width = col_count * square_size ## sets the width for the visual board to size of square by number of columns
+height = (row_count + 1) * square_size ## sets the height of visual to size of square by number of rows plus 1
 
-    # Player B user input
-    else:  # If value of player turn is odd
-        col_selection = int(input("Player B Please Make Your Selection (Choose Column 0-6): "))  # Ask Player B to choose row
+size = (width, height) ## sets variable equal to the height and width of the visual board
+radius = int(square_size/2 - 5) # sets radius for circles in visual board
 
-        if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full
-            row = find_next_open_row(game_board, col_selection)  # If the drop location is valid (row isn't full)
-            drop_game_piece(game_board, row, col_selection, 2)  # Drop game piece with value 2 at specified location
+screen = pygame.display.set_mode(size) ## displays the visual board
+draw_board(game_board) ## draws the board with new visual attributes from line 61
+pygame.display.update() ## updates the game board to new visual attributes
 
-            if win(game_board, 2):
-                print("PlAYER B IS THE CONNECT 4 CHAMP")
-                game_is_over = True
+while not game_is_over: ## while the game is not over, continues loop
 
-    flip_board(game_board)
+    for event in pygame.event.get(): ## initializes the different events that will be looked for in game
+        if event.type == pygame.QUIT: ## allows user to quit the game by using exit button
+            sys.exit()
+        if event.type == pygame.MOUSEBUTTONDOWN: ## initializes the type of event (clicking mouse) to make changes in game
+            # print(event.pos)
+            # Player A user input
+            if player_turn % 2 == 1:  # If value of player turn is odd
+                posx = event.pos[0]    # initializes the click of player to x position of click
+                col_selection = int(math.floor(posx/square_size)) # sets clicks to align with the set columns
 
-    player_turn += 1
-    player_turn = player_turn % 2
+                if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full)
+                    row = find_next_open_row(game_board,
+                                             col_selection)  # Making row equal to the output of find_next_open_row
+                    drop_game_piece(game_board, row, col_selection,
+                                    1)  # Drop game piece with value 1 at specified location
+
+                    if win(game_board, 1):  # if player A wins, print statement below
+                        print("PlAYER A IS THE CONNECT 4 CHAMP")
+                        game_is_over = True  # end game
+
+            # Player B user input
+            else:  # If value of player turn is odd
+                posx = event.pos[0]  # initializes the click of player to x position of click
+                col_selection = int(math.floor(posx / square_size))  # sets clicks to align with the set columns
+
+                if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full
+                    row = find_next_open_row(game_board,
+                                             col_selection)  # If the drop location is valid (row isn't full)
+                    drop_game_piece(game_board, row, col_selection,
+                                    2)  # Drop game piece with value 2 at specified location
+
+                    if win(game_board, 2):
+                        print("PlAYER B IS THE CONNECT 4 CHAMP")
+                        game_is_over = True
+
+            flip_board(game_board)
+
+            player_turn += 1
+            player_turn = player_turn % 2
+
