@@ -30,12 +30,16 @@ def find_next_open_row(game_board, col_selection):
 
 
 game_board = c4_board()
+print_board(game_board)
+def print_board(game_board):
+    print(np.flip(game_board, 0)
+    return
 
-# initializing game variables
 game_is_over = False
-player_turn = 1
+player_turn = 0
 
-while not game_is_over:
+while game_is_over == 0:
+    print(game_board)
     #  Player A user input
     if player_turn % 2 == 1:  # If value of player turn is odd
         col_selection = input("Player A Please Make Your Selection (Choose Column 0-6): ")  # Ask Player A to choose row
@@ -51,6 +55,6 @@ while not game_is_over:
             row = find_next_open_row(game_board, col_selection)  # If the drop location is valid (row isn't full
             drop_game_piece(game_board, row, col_selection, 2)  # Drop game piece with value 2 at specified location
 
-    print(game_board)
+    print(game_board) # Shows user the current status of the game board
 
-    player_turn += 1
+    player_turn += 1 # Changes the round of turns to the next round
