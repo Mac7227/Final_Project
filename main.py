@@ -6,13 +6,12 @@ import math
 Yellow = (255,255,0) # sets color yellow for use in visual board
 Black = (0,0,0) # sets color black for use in visual board
 
-# Creating dimensions for game board
+# initialize board dimensions
 row_count = 6
 col_count = 7
 
-
 # Create matrix of zeros to initialize game board
-def c4_board():
+def c4_board(row_count, col_count):
     game_board = np.zeros((row_count, col_count))
     return game_board
 
@@ -65,7 +64,7 @@ def draw_board(game_board): # function to draw game board with set sizes based o
             pygame.draw.circle(screen, Black, (int(c*square_size+square_size/2), int(r*square_size+square_size+square_size/2)), radius) # draws the circular portion of the game board
 
 
-game_board = c4_board()
+game_board = c4_board(row_count, col_count)
 
 # initializing game variables
 game_is_over = False
