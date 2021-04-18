@@ -332,7 +332,7 @@ while not game_is_over:  # while the game is not over, continues loop
                 col_selection, minimax_score = minimax(game_board, 5, -math.inf, math.inf, True)
 
             if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full)
-                pygame.time.wait(350) # wait 0.35seconds to place AI chip
+                pygame.time.wait(500) # wait 0.5seconds to place AI chip
                 row = find_next_open_row(game_board, col_selection)  # If the drop location is valid (row isn't full)
                 drop_game_piece(game_board, row, col_selection, AI_piece)  # Drop game piece with value 2 at specified location
 
