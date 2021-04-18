@@ -79,6 +79,7 @@ def win(game_board, game_piece):
             if game_board[r][c] == game_piece and game_board[r-1][c+1] == game_piece and game_board[r-2][c+2] == game_piece and game_board[r-3][c+3] == game_piece: #if all the values are the same on the leftward diagonal
                 return True
 
+
 def easy(block, game_piece): ## Establishes easy scoring mechanism for AI to base decisions off of
     score = 0
     opponent_piece = PlayerA_piece
@@ -303,13 +304,17 @@ while not game_is_over:  # while the game is not over, continues loop
                 if droploc_is_val(game_board, col_selection):  # If the drop location is valid (row isn't full)
                     row = find_next_open_row(game_board,
                                              col_selection)  # Making row equal to the output of find_next_open_row
-                    drop_game_piece(game_board, row, col_selection,
-                                    PlayerA_piece)  # Drop game piece with value 1 at specified location
+                    drop_game_piece(game_board, row, col_selection, PlayerA_piece)  # Drop game piece with value 1 at specified location
 
                     if win(game_board, PlayerA_piece):  # if player A wins, print win statement at top of game board in red color
                         win_label = Win_Font.render(PlayerA_name_response + " IS THE CHAMP",1,Red)  # create win label in red
                         screen.blit(win_label, (35,10))  # print win label at top of board
                         game_is_over = True  # end game
+
+                    if len(get_val_loc(game_board)) == 0: # Ends game if tie
+                        win_label = Win_Font.render('The Game Ties!', 1,Brown)
+                        screen.blit(win_label, (35, 10))
+                        game_is_over = True
 
                     # once AI turn is completed, update turn
                     player_turn += 1
@@ -335,6 +340,11 @@ while not game_is_over:  # while the game is not over, continues loop
                     win_label = Win_Font.render("COMPUTER IS THE CHAMP", 1, Yellow)  # create win label in yellow
                     screen.blit(win_label, (35, 10))  # print win label at top of board
                     game_is_over = True  # end game once player wins
+
+                if len(get_val_loc(game_board)) == 0:  # Ends game if tie
+                    win_label = Win_Font.render('The Game Ties!', 1, Brown)
+                    screen.blit(win_label, (35, 10))
+                    game_is_over = True
 
                 # flip and then draw the game board after each turn to update
                 flip_board(game_board)
