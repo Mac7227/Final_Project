@@ -133,7 +133,7 @@ def hard(block, game_piece): #Establishes hard base of scoring mechanism that mi
     return score
 
 while True: # Asks user what level of difficulty they want to play the AI at
-    difficulty_choice = input("Choose Difficulty level 'Type: 'easy' 'medium' or 'hard'")
+    difficulty_choice = input("Choose Difficulty level (Type: 'easy' 'medium' or 'hard):")
     if difficulty_choice in locals() and callable(locals()[difficulty_choice]):
         difficulty_choice = locals()[difficulty_choice]
         break
